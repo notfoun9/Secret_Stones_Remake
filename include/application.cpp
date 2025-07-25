@@ -65,9 +65,9 @@ public:
         if (app->impl.created == false)
         {
             app.reset();
+            spdlog::error("Could not finish ApplicationImpl creation");
         }
 
-        spdlog::error("Could not finish ApplicationImpl creation");
         return app;
     }
 
