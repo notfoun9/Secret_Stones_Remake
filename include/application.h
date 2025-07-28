@@ -1,7 +1,7 @@
 #pragma once
+
 #include "fonts.h"
 #include <memory>
-#include <spdlog/spdlog.h>
 
 class ApplicationImpl;
 
@@ -17,6 +17,8 @@ public:
     SDL_Renderer* Renderer();
 
     Fonts* Fonts();
+
+    void AdjustWindowSize();
 private:
     std::shared_ptr<ApplicationImpl> impl;
 };

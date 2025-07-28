@@ -1,6 +1,6 @@
 #include "application.h"
+#include <spdlog/spdlog.h>
 
-namespace {
 struct ApplicationBackend
 {
     ApplicationBackend()
@@ -50,10 +50,8 @@ struct ApplicationBackend
     SDL_Renderer*  renderer;
 
     const char*            windowTitle  = "Secret Stones";
-    static constexpr int   windowHeight = 600;
-    static constexpr int   windowWidth  = 800;
-};
-
+    static constexpr int   windowWidth  = 1920;
+    static constexpr int   windowHeight = 1080;
 };
 
 class ApplicationImpl
@@ -84,6 +82,24 @@ public:
     Fonts* Fonts()
     {
         return &fonts;
+    }
+
+    void AdjustWindowSize()
+    {
+        int width{};
+        int height{};
+
+        SDL_GetWindowSizeInPixels(Window(), &width, &height);
+        width /= 16;
+        height /= 9;
+        if (width > height)
+        {
+            SDL_SetWindowSize(Window(), width * 16, width * 9);
+        }
+        else
+        {
+            SDL_SetWindowSize(Window(), height * 16, height * 9);
+        }
     }
 
 private:
@@ -119,3 +135,9 @@ Fonts* Application::Fonts()
 
     return impl->Fonts();
 }
+
+void Application::AdjustWindowSize()
+{
+    return impl->AdjustWindowSize();
+}
+
