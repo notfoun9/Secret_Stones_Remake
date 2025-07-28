@@ -6,11 +6,12 @@ class Text {
 public:
     Text(const char* text, const FontName& font, const SDL_Color& color, Application app)
     {
-        auto surface = TTF_RenderText_Solid(
+        auto surface = TTF_RenderText_Solid_Wrapped(
             app.Fonts()->Get(font),
             text,
             0,
-            color
+            color,
+            0
         );
 
         if (!surface)
@@ -32,11 +33,17 @@ public:
         SDL_DestroyTexture(texture);
     }
 
-    SDL_Texture* Texture()
+    SDL_Texture*& Texture() &
     {
         return texture;
     }
     
+    SDL_Texture* Texture() &&
+    {
+        auto tmp = texture;
+        texture = nullptr;
+        return std::move(tmp);
+    }
 private:
     SDL_Texture* texture;
 };

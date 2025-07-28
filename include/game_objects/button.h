@@ -1,16 +1,6 @@
-#include <memory>
-#pragma one
-#include <SDL3/SDL.h>
-#include "application.h"
-#include "texture_manager.h"
-
-struct GameObject
-{
-    virtual ~GameObject() = default;
-    virtual void Draw(SDL_Renderer* renderer) = 0;
-
-    virtual void Update(SDL_Event& event) = 0;
-};
+#pragma once
+#include "../application.h"
+#include "game_object.h"
 
 class Button : public GameObject
 {
@@ -26,7 +16,7 @@ public:
         UpdateDestRect();
     }
 
-    ~Button()
+    ~Button() override
     {
         SDL_DestroyTexture(defaultTex);
         SDL_DestroyTexture(selectedTex);
@@ -74,10 +64,14 @@ public:
 
         if (SDL_HasRectIntersectionFloat(&destRect, &mouseTip))
         {
-            currentTex = selectedTex;
             if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
             {
                 action->operator()();
+                currentTex = defaultTex;
+            }
+            else
+            {
+                currentTex = selectedTex;
             }
         }
         else

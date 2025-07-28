@@ -2,7 +2,7 @@
 
 #include "../application.h"
 #include "../game_states.h"
-#include "../game_object.h"
+#include "../game_objects/button.h"
 #include <memory>
 
 class Menu
@@ -104,14 +104,14 @@ inline void Menu::Run(GameState& state)
             case SDL_EVENT_QUIT:
             {
                 state = GameState::Exit;
-                break;
+                return;
             };
             case SDL_EVENT_KEY_DOWN:
             {
                 if (event.key.key == SDLK_ESCAPE)
                 {
                     state = GameState::Exit;
-                    break;
+                    return;
                 }
             };
             case SDL_EVENT_WINDOW_RESIZED:
@@ -132,5 +132,5 @@ inline void Menu::Run(GameState& state)
         obj->Draw(app.Renderer());
     }
 
-    state = nextState;
+    std::swap(state, nextState);
 }

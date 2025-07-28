@@ -1,6 +1,7 @@
 #include "include/application.h"
 #include "include/game_states.h"
 #include "include/states/menu.h"
+#include "include/states/rules.h"
 #include <chrono>
 #include <thread>
 
@@ -8,9 +9,10 @@ int main(int argc, char* argv[])
 {
     auto app = Application();
     Menu menu{app};
+    Rules rules{app};
     // TODO:
     // Party party{app};
-    // Rules rules{app};
+    // GameOver gameOver{app};
     
     using namespace std::chrono_literals;
     auto last = std::chrono::steady_clock::now();
@@ -25,10 +27,11 @@ int main(int argc, char* argv[])
         SDL_RenderClear(app.Renderer());
         switch (state)
         {
-            case GameState::Menu:     menu.Run(state);  break;
+            case GameState::Menu:      menu.Run(state);      break;
+            case GameState::Rules:     rules.Run(state);     break;
             // TODO:
-            // case GameState::Party:    party.Run(state);  break;
-            // case GameState::Rules:    rules.Run(state);  break;
+            // case GameState::Party:     party.Run(state);     break;
+            // case GameState::GameOver:  gameOver.Run(state);  break;
 
             default: state = GameState::Exit;  break;
         }
