@@ -15,14 +15,16 @@ struct GameObject
 class Button : public GameObject
 {
 public:
-    Button(const char* defaultTexPath, const char* selectedTexPath, SDL_FRect dest, Application app)
+    Button(const char* defaultTexPath, const char* selectedTexPath, SDL_FRect rect, Application app)
         : defaultTex(TextureManager::LoadTexture(app.Renderer(), defaultTexPath))
         , selectedTex(TextureManager::LoadTexture(app.Renderer(), selectedTexPath))
-        , destRect(dest)
+        , relativeRect(rect)
         , currentTex(defaultTex)
         , app(app)
         , action(nullptr)
-    {}
+    {
+        UpdateDestRect();
+    }
 
     ~Button()
     {
@@ -41,6 +43,20 @@ public:
         action = std::move(newAction);
     }
 
+    void UpdateDestRect()
+    {
+        int windowWidth{};
+        SDL_GetWindowSizeInPixels(app.Window(), &windowWidth, NULL);
+        windowWidth /= 16;
+
+        destRect = {
+            windowWidth * relativeRect.x,
+            windowWidth * relativeRect.y,
+            windowWidth * relativeRect.w,
+            windowWidth * relativeRect.h
+        };
+    }
+
     void Draw(SDL_Renderer* renderer) override
     {
         TextureManager::DrawFull(app.Renderer(), currentTex, &destRect);
@@ -48,13 +64,18 @@ public:
 
     void Update(SDL_Event& event) override
     {
+        if (event.type == SDL_EVENT_WINDOW_RESIZED)
+        {
+            UpdateDestRect();
+        }
+
         SDL_FRect mouseTip{0, 0, 1, 1};
         SDL_GetMouseState(&mouseTip.x, &mouseTip.y);
 
         if (SDL_HasRectIntersectionFloat(&destRect, &mouseTip))
         {
             currentTex = selectedTex;
-            if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN && action)
+            if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
             {
                 action->operator()();
             }
@@ -67,6 +88,7 @@ public:
 
 private:
     Application  app;
+    SDL_FRect    relativeRect;
     SDL_FRect    destRect;
     SDL_Texture* defaultTex;
     SDL_Texture* selectedTex;

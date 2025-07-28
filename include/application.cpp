@@ -33,6 +33,7 @@ struct ApplicationBackend
             Log::CriticalSDLError("SDL_CreateRenderer failed: {}");
             return;
         }
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
         created = true;
     }
@@ -50,8 +51,8 @@ struct ApplicationBackend
     SDL_Renderer*  renderer;
 
     const char*            windowTitle  = "Secret Stones";
-    static constexpr int   windowWidth  = 1920;
-    static constexpr int   windowHeight = 1080;
+    static constexpr int   windowWidth  = 1600;
+    static constexpr int   windowHeight = 900;
 };
 
 class ApplicationImpl
