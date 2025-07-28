@@ -1,6 +1,5 @@
 #pragma once
-#include "fonts.h"
-#include "application.h"
+#include <application/application.h>
 
 class Text {
 public:

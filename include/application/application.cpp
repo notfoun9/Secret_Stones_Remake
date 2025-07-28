@@ -1,5 +1,5 @@
-#include "application.h"
 #include <spdlog/spdlog.h>
+#include "application.h"
 
 struct ApplicationBackend
 {

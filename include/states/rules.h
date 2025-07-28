@@ -1,11 +1,9 @@
 #pragma once
-
-#include "../application.h"
-#include "../game_states.h"
-#include "../text.h"
+#include <application/application.h>
+#include "game_states.h"
+#include "../tools/text.h"
 #include "../game_objects/button.h"
 #include "../game_objects/static_texture.h"
-#include <memory>
 
 class Rules
 {

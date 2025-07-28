@@ -1,6 +1,7 @@
 #pragma once
-#include "../application.h"
+#include <application/application.h>
 #include "game_object.h"
+#include "../tools/texture_manager.h"
 
 class Button : public GameObject
 {

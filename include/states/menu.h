@@ -1,9 +1,7 @@
 #pragma once
-
-#include "../application.h"
-#include "../game_states.h"
+#include <application/application.h>
+#include "game_states.h"
 #include "../game_objects/button.h"
-#include <memory>
 
 class Menu
 {

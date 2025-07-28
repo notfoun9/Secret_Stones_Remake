@@ -1,9 +1,7 @@
-#include "include/application.h"
-#include "include/game_states.h"
+#include <application/application.h>
+#include "include/states/game_states.h"
 #include "include/states/menu.h"
 #include "include/states/rules.h"
-#include <chrono>
-#include <thread>
 
 int main(int argc, char* argv[])
 {

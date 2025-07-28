@@ -1,6 +1,5 @@
 #pragma once
 #include <SDL3/SDL.h>
-#include "../texture_manager.h"
 
 struct GameObject
 {

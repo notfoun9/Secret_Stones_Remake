@@ -2,8 +2,7 @@
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <spdlog/spdlog.h>
-#include <memory>
-#include "log.h"
+#include "../tools/log.h"
 
 namespace {
     class Font_details

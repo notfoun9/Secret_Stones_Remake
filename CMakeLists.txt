@@ -16,7 +16,7 @@ add_executable(main main.cpp)
 
 # Link libraries
 target_link_libraries(main PRIVATE
-    game
+    application
     spdlog::spdlog
     SDL3::SDL3
     SDL3_ttf::SDL3_ttf

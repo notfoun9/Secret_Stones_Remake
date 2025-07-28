@@ -1,5 +1,6 @@
+#pragma once
 #include <SDL3_image/SDL_image.h>
-#include "include/log.h"
+#include "log.h"
 
 namespace TextureManager {
 

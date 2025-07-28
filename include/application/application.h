@@ -1,7 +1,5 @@
 #pragma once
-
 #include "fonts.h"
-#include <memory>
 
 class ApplicationImpl;
 

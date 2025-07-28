@@ -1,6 +1,7 @@
 #pragma once
+#include <application/application.h>
 #include "game_object.h"
-#include "../application.h"
+#include "../tools/texture_manager.h"
 
 class StaticTexture : public GameObject
 {
