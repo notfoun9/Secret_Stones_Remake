@@ -33,8 +33,7 @@ namespace {
 
 enum FontName : char
 {
-    Arial50 = 0,
-    JB_Mono = 1,
+    JB_Mono = 0,
 };
 
 class Fonts
@@ -42,7 +41,6 @@ class Fonts
 public:
     Fonts()
     {
-        fonts[Arial50] = std::make_unique<Font_details>("assets/aerial.ttf", 50);
         fonts[JB_Mono] = std::make_unique<Font_details>("assets/jb_mono.ttf", 50);
     }
 

@@ -1,5 +1,6 @@
 #include <spdlog/spdlog.h>
 #include "application.h"
+#include "../tools/fps_controller.h"
 
 struct ApplicationBackend
 {
@@ -53,6 +54,8 @@ struct ApplicationBackend
     const char*            windowTitle  = "Secret Stones";
     static constexpr int   windowWidth  = 1600;
     static constexpr int   windowHeight = 900;
+
+    FPS_Controller         fps{60};
 };
 
 class ApplicationImpl
@@ -103,6 +106,11 @@ public:
         }
     }
 
+    void ControlFPS()
+    {
+        impl.fps.Control();
+    }
+
 private:
     ApplicationBackend  impl;
     class Fonts         fonts;
@@ -133,12 +141,16 @@ SDL_Renderer* Application::Renderer()
 
 Fonts* Application::Fonts()
 {
-
     return impl->Fonts();
 }
 
 void Application::AdjustWindowSize()
 {
     return impl->AdjustWindowSize();
+}
+
+void Application::ControlFPS()
+{
+    return impl->ControlFPS();
 }
 

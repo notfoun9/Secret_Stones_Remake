@@ -17,6 +17,8 @@ public:
     Fonts* Fonts();
 
     void AdjustWindowSize();
+
+    void ControlFPS();
 private:
     std::shared_ptr<ApplicationImpl> impl;
 };

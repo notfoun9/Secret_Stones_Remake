@@ -48,7 +48,7 @@ public:
         };
     }
 
-    void Draw(SDL_Renderer* renderer) override
+    void Draw() override
     {
         TextureManager::DrawFull(app.Renderer(), currentTex, &destRect);
     }

@@ -29,7 +29,7 @@ public:
         SDL_DestroyTexture(tex);
     }
 
-    void Draw(SDL_Renderer* renderer) override
+    void Draw() override
     {
         if (visible)
         {

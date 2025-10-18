@@ -59,46 +59,55 @@ inline Rules::Rules(Application app)
 
 inline void Rules::Run(GameState& state)
 {
-    SDL_Event event;
-    while (SDL_PollEvent(&event))
+    while (state == GameState::Rules)
     {
-        switch (event.type)
+        SDL_RenderClear(app.Renderer());
+
+        SDL_Event event;
+        while (SDL_PollEvent(&event))
         {
-            case SDL_EVENT_QUIT:
+            switch (event.type)
             {
-                state = GameState::Exit;
-                return;
-            };
-            case SDL_EVENT_KEY_DOWN:
-            {
-                if (event.key.key == SDLK_ESCAPE)
+                case SDL_EVENT_QUIT:
                 {
-                    state = GameState::Menu;
+                    state = GameState::Exit;
                     return;
-                }
-            };
-            case SDL_EVENT_WINDOW_RESIZED:
+                };
+                case SDL_EVENT_KEY_DOWN:
+                {
+                    if (event.key.key == SDLK_ESCAPE)
+                    {
+                        state = GameState::Menu;
+                        return;
+                    }
+                };
+                case SDL_EVENT_WINDOW_RESIZED:
+                {
+                    app.AdjustWindowSize();
+                };
+                default: break;
+            }
+
+            for (auto& obj : gameObjects)
             {
-                app.AdjustWindowSize();
-            };
-            default: break;
+                obj->Update(event);
+            }
         }
 
         for (auto& obj : gameObjects)
         {
-            obj->Update(event);
+            obj->Draw();
         }
-    }
 
-    for (auto& obj : gameObjects)
-    {
-        obj->Draw(app.Renderer());
-    }
+        SDL_RenderPresent(app.Renderer());
 
-    if (exited)
-    {
-        state = GameState::Menu;
-        exited = false;
+        if (exited)
+        {
+            state = GameState::Menu;
+            exited = false;
+        }
+
+        app.ControlFPS();
     }
 }
 
