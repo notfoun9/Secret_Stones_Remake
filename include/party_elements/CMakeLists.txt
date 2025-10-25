@@ -1,6 +1,11 @@
 add_library(party_elements
+    card.h
+    conditions.h
+    conditions.cpp
+    colors.h
     field.h
-    field.cpp
+    pool.h
+    pool.cpp
     tile.h
     tile.cpp
 )
