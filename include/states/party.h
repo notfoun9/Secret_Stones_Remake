@@ -2,6 +2,8 @@
 #include <application/application.h>
 #include "game_states.h"
 #include <game_objects/game_object.h>
+#include <party_elements/manager.h>
+#include <party_elements/hand.h>
 
 class Party
 {

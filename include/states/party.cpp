@@ -1,6 +1,6 @@
-#include <memory>
 #include <states/party.h>
 #include <party_elements/field.h>
+#include <party_elements/hand.h>
 #include "../game_objects/button.h"
 #include "../game_objects/switch.h"
 #include "../game_objects/static_texture.h"
@@ -88,7 +88,7 @@ void Party::Run(GameState& state)
 
 void Party::InitGameObjects()
 {
-    auto field = std::make_unique<Field>(app);
+    gameObjects.emplace_back(std::make_unique<Field>(app));
 
     auto menuButton = std::make_unique<Button>(
         "assets/menu_default.png",
@@ -97,55 +97,33 @@ void Party::InitGameObjects()
         app
     );
     menuButton->SetAction(std::make_unique<ExitAction>(exited));
+    gameObjects.emplace_back(std::move(menuButton));
 
-    auto tip = std::make_unique<StaticTexture>(
+    gameObjects.emplace_back(std::make_unique<StaticTexture>(
         "assets/tip.png",
         SDL_FRect{0.4, 1.425, 3, 4.875},
         app
-    );
+    ));
 
-    auto skipButton = std::make_unique<Button>(
+    gameObjects.emplace_back(std::make_unique<Button>(
         "assets/skip_default.png",
         "assets/skip_selected.png",
         SDL_FRect{0.4, 6.45, 3, 1.125},
         app
-    );
+    ));
 
-    auto dropSwitch = std::make_unique<Switch>(
+    gameObjects.emplace_back(std::make_unique<Switch>(
         "assets/drop_default.png",
         "assets/drop_selected.png",
         SDL_FRect{0.4, 7.725, 3, 1.125},
         app
-    );
+    ));
 
-    auto card1 = std::make_unique<StaticTexture>(
-        "assets/Card_5_1.png",
-        SDL_FRect{3.8, 6.6, 1.5, 2.25},
-        app
-    );
-    auto card2 = std::make_unique<StaticTexture>(
-        "assets/Card_5_2.png",
-        SDL_FRect{5.35, 6.6, 1.5, 2.25},
-        app
-    );
-    auto card3 = std::make_unique<StaticTexture>(
-        "assets/Card_5_3.png",
-        SDL_FRect{6.9, 6.6, 1.5, 2.25},
-        app
-    );
-    auto card4 = std::make_unique<StaticTexture>(
-        "assets/Card_5_0.png",
-        SDL_FRect{8.45, 6.6, 1.5, 2.25},
-        app
-    );
-
-    gameObjects.push_back(std::move(card1));
-    gameObjects.push_back(std::move(card2));
-    gameObjects.push_back(std::move(card3));
-    gameObjects.push_back(std::move(card4));
-    gameObjects.push_back(std::move(menuButton));
-    gameObjects.push_back(std::move(skipButton));
-    gameObjects.push_back(std::move(dropSwitch));
-    gameObjects.push_back(std::move(tip));
-    gameObjects.push_back(std::move(field));
+    auto hand = std::make_unique<Hand>(app);
+    hand->AddCard(Card{2, 1, app});
+    hand->AddCard(Card{2, 13, app});
+    hand->AddCard(Card{2, 0, app});
+    hand->AddCard(Card{1, 22, app});
+    
+    gameObjects.push_back(std::move(hand));
 }

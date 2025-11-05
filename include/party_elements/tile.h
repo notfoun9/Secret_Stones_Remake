@@ -1,28 +1,41 @@
 #include "application/application.h"
+#include <party_elements/colors.h>
 
 class Tile
 {
 public:
-    Tile(const char* front, const char* back, int frontColor, int backColor, Application app, int pos);
+    Tile(const char* front, const char* back, color frontColor, color backColor, Application app, int pos);
     ~Tile();
 
     void Update(SDL_Event& event);
     void Draw(SDL_Renderer* renderer);
 
-    // const SDL_Texture* GetActiveSide() const;
-    // void Flip();
+    color GetActiveColor() const
+    {
+        return activeColor;
+    }
+
+    const SDL_Texture* GetActiveSide() const
+    {
+        return currentTex;
+    }
+
+    void Flip()
+    {
+        currentTex = (currentTex == backTex ? frontTex : backTex);
+    }
 private:
     SDL_Texture* frontTex{};
     SDL_Texture* backTex{};
     SDL_Texture* currentTex{};
 
-    int frontColor{};
-    int backColor{};
-    int activeColor{};
+    color frontColor{};
+    color backColor{};
+    color activeColor{};
 
     Application app;
 
-    int position;
+    int position{};
     bool selected{};
     SDL_FRect relativeRect{};
     SDL_FRect destRect{};

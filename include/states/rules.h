@@ -45,16 +45,14 @@ inline Rules::Rules(Application app)
         app
     );
     exitButton->SetAction(std::make_unique<ExitAction>(exited));
+    gameObjects.push_back(std::move(exitButton));
 
     extern const std::string rulesText;
-    auto rules = std::make_unique<StaticTexture>(
+    gameObjects.emplace_back(std::make_unique<StaticTexture>(
         Text{rulesText.data(), FontName::JB_Mono, {0,0,0,0}, app}.Texture(),
         SDL_FRect{0.2, 0.2, 15.6, 6.6},
         app
-    );
-
-    gameObjects.push_back(std::move(rules));
-    gameObjects.push_back(std::move(exitButton));
+    ));
 }
 
 inline void Rules::Run(GameState& state)

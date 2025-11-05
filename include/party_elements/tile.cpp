@@ -1,7 +1,7 @@
 #include <party_elements/tile.h>
 #include "tools/texture_manager.h"
 
-Tile::Tile(const char* front, const char* back, int frontColor, int backColor, Application app, int pos)
+Tile::Tile(const char* front, const char* back, color frontColor, color backColor, Application app, int pos)
     : frontTex(TextureManager::LoadTexture(app.Renderer(), front))
     , backTex(TextureManager::LoadTexture(app.Renderer(), back))
     , frontColor(frontColor)

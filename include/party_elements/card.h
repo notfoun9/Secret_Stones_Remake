@@ -3,7 +3,6 @@
 #include "application/application.h"
 #include <party_elements/conditions.h>
 
-
 class Card
 {
 public: 
@@ -12,17 +11,32 @@ public:
         , condition(GetCondition(cost, id))
     {}
 
+    Card(Card&& card) : face(card.face), condition(card.condition)
+    {
+        card.face = nullptr;
+    }
+
+    void operator=(Card&& card)
+    {
+        SDL_DestroyTexture(face);
+        face = card.face;
+        condition = card.condition;
+    }
+
+    Card(const Card&) = delete;
+    void operator=(const Card&) = delete;
+
     ~Card()
     {
         SDL_DestroyTexture(face);
     }
 
-    const SDL_Texture* const Face() const
+    SDL_Texture* Face() const
     {
         return face;
     }
 
-    bool CheckCondition(const std::vector<int>& fieldState) const
+    bool CheckCondition(const std::vector<color>& fieldState) const
     {
         return condition(fieldState);
     }
@@ -34,5 +48,5 @@ private:
     }
 
     SDL_Texture* face;
-    bool      (* condition)(const std::vector<int>& fieldStatus);
+    bool      (* condition)(const std::vector<color>& fieldStatus);
 } ;

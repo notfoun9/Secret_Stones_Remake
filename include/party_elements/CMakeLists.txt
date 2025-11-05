@@ -4,6 +4,9 @@ add_library(party_elements
     conditions.cpp
     colors.h
     field.h
+    hand.h
+    manager.h
+    manager.cpp
     pool.h
     pool.cpp
     tile.h
