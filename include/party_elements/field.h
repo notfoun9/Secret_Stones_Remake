@@ -4,7 +4,7 @@
 #include <party_elements/colors.h>
 #include "game_objects/game_object.h"
 #include "game_objects/static_texture.h"
-#include "party_elements/manager.h"
+#include <party_elements/manager.h>
 #include <party_elements/conditions.h>
 
 class Field : public GameObject

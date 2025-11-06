@@ -15,4 +15,5 @@ namespace Manager
     bool TryUseCard(const Card& card);
 
     void InitField(Field* field);
+    void InitPool(Pool* pool);
 };

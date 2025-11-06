@@ -7,7 +7,8 @@ class Card
 {
 public: 
     Card(const int cost, const int id, Application app) 
-        : face(TextureManager::LoadTexture(app.Renderer(), Card::CardName(cost, id).data()))
+        : cost(cost)
+        , face(TextureManager::LoadTexture(app.Renderer(), Card::CardName(cost, id).data()))
         , condition(GetCondition(cost, id))
     {}
 
@@ -36,6 +37,11 @@ public:
         return face;
     }
 
+    int Cost()
+    {
+        return cost;
+    }
+
     bool CheckCondition(const std::vector<color>& fieldState) const
     {
         return condition(fieldState);
@@ -47,6 +53,7 @@ private:
         return "assets/Card_" + std::to_string(cost) + "_" + std::to_string(id) + ".png";
     }
 
+    int          cost;
     SDL_Texture* face;
     bool      (* condition)(const std::vector<color>& fieldStatus);
 } ;
