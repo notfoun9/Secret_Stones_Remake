@@ -3,6 +3,8 @@ add_library(party_elements
     conditions.h
     conditions.cpp
     colors.h
+    deck.h
+    deck.cpp
     field.h
     hand.h
     manager.h

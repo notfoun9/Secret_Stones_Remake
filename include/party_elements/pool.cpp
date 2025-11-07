@@ -1,12 +1,17 @@
 #include <party_elements/pool.h>
 #include <party_elements/card.h>
-#include "../tools/randomizer.h"
 #include <party_elements/manager.h>
+#include "../tools/randomizer.h"
+
+#define COST_1_CARDS 28
+#define COST_2_CARDS 19
+#define COST_3_CARDS 13
+#define COST_5_CARDS 5
 
 Pool::Pool(Application app)
     : app(app)
 {
-    cards.reserve(6);
+    cards.resize(6);
     cards[1].reserve(COST_1_CARDS);
     cards[2].reserve(COST_2_CARDS);
     cards[3].reserve(COST_3_CARDS);
@@ -37,8 +42,9 @@ Pool::Pool(Application app)
 
 Card Pool::TakeCard(int cost)
 {
-    Card card{std::move(cards[cost].back())};
-    cards.pop_back();
+    Randomize(cost);
+    auto card = std::move(cards[cost].back());
+    cards[cost].pop_back();
 
     return card;
 }
@@ -52,5 +58,5 @@ void Pool::Randomize(int cost)
 {
     auto size = cards[cost].size();
     auto id = Random::Generate(0, size - 1);
-    std::swap(cards[id], cards.back());
+    std::swap(cards[cost][id], cards[cost].back());
 }

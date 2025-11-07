@@ -1,20 +1,23 @@
 #pragma once
+#include "game_objects/game_object.h"
 #include <application/application.h>
-
-#define COST_1_CARDS 28
-#define COST_2_CARDS 19
-#define COST_3_CARDS 13
-#define COST_5_CARDS 5
 
 class Card;
 
-class Pool{
+class Pool : public GameObject
+{
 public:
     Pool(Application app);
-    ~Pool() = default;
+    ~Pool() override = default;
 
     Card TakeCard(int cost);
     void PutCard(Card&& card);
+
+    void Draw() override
+    {}
+
+    void Update(SDL_Event& event) override
+    {}
 private:
     void Randomize(int cost);
 

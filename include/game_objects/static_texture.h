@@ -37,7 +37,7 @@ public:
         }
     }
 
-    virtual void Update(SDL_Event& event) override
+    void Update(SDL_Event& event) override
     {
         if (event.type == SDL_EVENT_WINDOW_RESIZED)
         {

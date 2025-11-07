@@ -12,15 +12,15 @@ public:
         , condition(GetCondition(cost, id))
     {}
 
-    Card(Card&& card) : face(card.face), condition(card.condition)
+    Card(Card&& card) : face(card.face), condition(card.condition), cost(card.cost)
     {
         card.face = nullptr;
     }
 
     void operator=(Card&& card)
     {
-        SDL_DestroyTexture(face);
-        face = card.face;
+        std::swap(face, card.face);
+        cost = card.cost;
         condition = card.condition;
     }
 

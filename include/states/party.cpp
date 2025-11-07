@@ -1,6 +1,9 @@
+#include <memory>
 #include <states/party.h>
 #include <party_elements/field.h>
 #include <party_elements/hand.h>
+#include <party_elements/deck.h>
+#include <party_elements/pool.h>
 #include "../game_objects/button.h"
 #include "../game_objects/switch.h"
 #include "../game_objects/static_texture.h"
@@ -17,6 +20,14 @@ struct ExitAction : public Button::Action
     }
 
     bool& exited;
+};
+
+struct SkipAction : public Button::Action
+{
+    void operator()() override
+    {
+        Manager::FillHand();
+    }
 };
 
 Party::Party(Application app)
@@ -43,7 +54,7 @@ void Party::HandleEvents(GameState& state)
             {
                 if (event.key.key == SDLK_ESCAPE)
                 {
-                    state = GameState::Menu;
+                    exited = true;
                     return;
                 }
             };
@@ -63,6 +74,7 @@ void Party::HandleEvents(GameState& state)
 
 void Party::Run(GameState& state)
 {
+    Manager::StartParty();
     while (state == GameState::Party)
     {
         SDL_RenderClear(app.Renderer());
@@ -78,6 +90,7 @@ void Party::Run(GameState& state)
 
         if (exited)
         {
+            Manager::EndParty();
             state = GameState::Menu;
             exited = false;
         }
@@ -99,16 +112,18 @@ void Party::InitGameObjects()
     menuButton->SetAction(std::make_unique<ExitAction>(exited));
     gameObjects.emplace_back(std::move(menuButton));
 
-    gameObjects.emplace_back(std::make_unique<StaticTexture>(
-        "assets/tip.png",
-        SDL_FRect{0.4, 1.425, 3, 4.875},
-        app
-    ));
-
-    gameObjects.emplace_back(std::make_unique<Button>(
+    auto skipButton = std::make_unique<Button>(
         "assets/skip_default.png",
         "assets/skip_selected.png",
         SDL_FRect{0.4, 6.45, 3, 1.125},
+        app
+    );
+    skipButton->SetAction(std::make_unique<SkipAction>());
+    gameObjects.emplace_back(std::move(skipButton));
+
+    gameObjects.emplace_back(std::make_unique<StaticTexture>(
+        "assets/tip.png",
+        SDL_FRect{0.4, 1.425, 3, 4.875},
         app
     ));
 
@@ -119,11 +134,7 @@ void Party::InitGameObjects()
         app
     ));
 
-    auto hand = std::make_unique<Hand>(app);
-    hand->AddCard(Card{2, 1, app});
-    hand->AddCard(Card{2, 13, app});
-    hand->AddCard(Card{2, 0, app});
-    hand->AddCard(Card{1, 22, app});
-    
-    gameObjects.push_back(std::move(hand));
+    gameObjects.emplace_back(std::make_unique<Pool>(app));
+    gameObjects.emplace_back(std::make_unique<Deck>(app));
+    gameObjects.emplace_back(std::make_unique<Hand>(app));
 }

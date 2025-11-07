@@ -12,8 +12,16 @@ namespace Manager
 {
     struct Elements;
 
-    bool TryUseCard(const Card& card);
+    bool CardIsUsable(const Card& card);
+    void UseCard(Card&& card);
+    Card TakeCardFromPool(int cost);
+    void FillHand();
 
+    void StartParty();
+    void EndParty();
+
+    void InitDeck(Deck* deck);
     void InitField(Field* field);
+    void InitHand(Hand* hand);
     void InitPool(Pool* pool);
 };

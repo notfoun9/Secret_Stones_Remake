@@ -5,6 +5,7 @@
 #include <party_elements/card.h>
 #include <party_elements/manager.h>
 #include <optional>
+#include <vector>
 
 #define HAND_SIZE 4
 #define DESELECTED_CARD_Y 6.6f
@@ -20,7 +21,10 @@ public:
     {
         for (int i = 0; i < HAND_SIZE; ++i)
         {
-            TextureManager::DrawFull(app.Renderer(), cards[i]->Face(), &dests[i]);
+            if (cards[i].has_value())
+            {
+                TextureManager::DrawFull(app.Renderer(), cards[i]->Face(), &dests[i]);
+            }
         }
     }
 
@@ -31,7 +35,7 @@ public:
 
         for (int i = 0; i < HAND_SIZE; ++i)
         {
-            if (SDL_HasRectIntersectionFloat(&dests[i], &mouseTip))
+            if (SDL_HasRectIntersectionFloat(&dests[i], &mouseTip) && cards[i].has_value())
             {
                 relatives[i].y = SELECTED_CARD_Y;
                 if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
@@ -58,6 +62,24 @@ public:
             }
         }
     }
+
+    int EmptySlots()
+    {
+        int slots{};
+        for (const auto& card : cards)
+        {
+            if (!card.has_value())
+            {
+                ++slots;
+            }
+        }
+        return slots;
+    }
+
+    std::vector<std::optional<Card>>& Cards()
+    {
+        return cards;
+    }
 private:
     void UpdateDestRect()
     {
@@ -78,9 +100,11 @@ private:
 
     void TryUseCard(int i)
     {
-        if (Manager::TryUseCard(cards[i].value()))
+        if (Manager::CardIsUsable(cards[i].value()))
         {
-            // TODO
+            auto card = std::move(cards[i].value());
+            cards[i].reset();
+            Manager::UseCard(std::move(card));
         }
     }
 
@@ -103,6 +127,7 @@ inline Hand::Hand(Application app) : app(app)
     }
 
     UpdateDestRect();
+    Manager::InitHand(this);
 }
 
 
