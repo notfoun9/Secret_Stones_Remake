@@ -20,6 +20,8 @@ namespace Manager
     void StartParty();
     void EndParty();
 
+    void SwitchMode();
+
     void InitDeck(Deck* deck);
     void InitField(Field* field);
     void InitHand(Hand* hand);

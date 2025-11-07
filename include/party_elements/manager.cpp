@@ -13,6 +13,12 @@ static Field* m_field = nullptr;
 static Pool*  m_pool = nullptr;
 static Hand*  m_hand = nullptr;
 
+enum Mode : bool
+{
+    Drop,
+    Select
+} mode = Select;
+
 
 void InitDeck(Deck* deck)
 {
@@ -49,7 +55,7 @@ void InitHand(Hand* hand)
 
 bool CardIsUsable(const Card &card)
 {
-    return card.CheckCondition(m_field->GetState());
+    return (mode == Drop) || card.CheckCondition(m_field->GetState());
 }
 
 void UseCard(Card&& card)
@@ -93,4 +99,17 @@ void EndParty()
         m_pool->PutCard(m_deck->TakeCard());
     }
 }
+
+void SwitchMode()
+{
+    if (mode == Drop)
+    {
+        mode = Select;
+    }
+    else
+    {
+        mode = Drop;
+    }
+}
+
 };
