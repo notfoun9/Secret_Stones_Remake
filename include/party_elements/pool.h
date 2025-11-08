@@ -3,6 +3,7 @@
 #include <application/application.h>
 
 class Card;
+typedef std::unique_ptr<Card> CardPtr;
 
 class Pool : public GameObject
 {
@@ -10,8 +11,8 @@ public:
     Pool(Application app);
     ~Pool() override = default;
 
-    Card TakeCard(int cost);
-    void PutCard(Card&& card);
+    CardPtr TakeCard(int cost);
+    void PutCard(CardPtr card);
 
     void Draw() override
     {}
@@ -24,6 +25,6 @@ private:
     Application app;
     size_t size;
 
-    std::vector<std::vector<Card>> cards;
+    std::vector<std::vector<CardPtr>> cards;
 } ;
 

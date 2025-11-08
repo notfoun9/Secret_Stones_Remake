@@ -1,9 +1,8 @@
 #pragma once
-#include <vector>
 #include <party_elements/tile.h>
 #include <party_elements/colors.h>
-#include "game_objects/game_object.h"
 #include "game_objects/static_texture.h"
+#include "../tools/randomizer.h"
 #include <party_elements/manager.h>
 #include <party_elements/conditions.h>
 
@@ -16,9 +15,9 @@ public:
     void Update(SDL_Event& event) override;
     void Draw() override;
 
-    // TODO:
-    // void constructRandomField();
-    // void swapTiles(int i, int j);
+    void ConstructRandomField();
+    void SwapTiles(int i, int j);
+
     FieldState GetState() const;
 
 private:
@@ -74,3 +73,24 @@ inline FieldState Field::GetState() const
     }
     return state;
 }
+
+inline void Field::ConstructRandomField()
+{
+    for (int i = 0; i < 9; ++i)
+    {
+        auto flip = Random::Generate(0, 1);
+        if (flip)
+        {
+            tiles[i].Flip();
+        }
+
+        auto j = Random::Generate(0, 8);
+        tiles[i].Swap(tiles[j]);
+    }
+}
+
+inline void Field::SwapTiles(int i, int j)
+{
+    tiles[i].Swap(tiles[j]);
+}
+

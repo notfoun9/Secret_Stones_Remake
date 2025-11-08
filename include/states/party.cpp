@@ -7,6 +7,7 @@
 #include "../game_objects/button.h"
 #include "../game_objects/switch.h"
 #include "../game_objects/static_texture.h"
+#include "party_elements/discard_pile.h"
 #include "party_elements/manager.h"
 
 struct ExitAction : public Button::Action
@@ -27,7 +28,7 @@ struct SkipAction : public Button::Action
 {
     void operator()() override
     {
-        Manager::FillHand();
+        Manager::SkipAction();
     }
 };
 
@@ -147,4 +148,5 @@ void Party::InitGameObjects()
     gameObjects.emplace_back(std::make_unique<Pool>(app));
     gameObjects.emplace_back(std::make_unique<Deck>(app));
     gameObjects.emplace_back(std::make_unique<Hand>(app));
+    gameObjects.emplace_back(std::make_unique<DiscardPile>(app));
 }

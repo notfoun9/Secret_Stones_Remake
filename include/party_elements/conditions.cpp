@@ -5,7 +5,7 @@ extern const std::vector<std::vector<Cond>> cardConditions;
 
 Cond GetCondition(int cost, int id)
 {
-    return cardConditions[cost - 1][id];
+    return cardConditions[cost][id];
 }
 
 template<int cost, int id>
@@ -647,11 +647,12 @@ const std::vector<bool(*)(const std::vector<color>&)> cardConditions3
 const std::vector<bool(*)(const std::vector<color>&)> cardConditions5
 {
     CardCondition<5, 0>,  CardCondition<5, 1>,  CardCondition<5, 2>,  CardCondition<5, 3>,
-    CardCondition<5 , 4>
+    CardCondition<5, 4>
 };
 
 const std::vector<std::vector<Cond>> cardConditions
 {
+    {},
     cardConditions1,
     cardConditions2,
     cardConditions3,

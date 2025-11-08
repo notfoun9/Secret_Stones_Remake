@@ -3,7 +3,7 @@
 #include <party_elements/card.h>
 #include "../tools/randomizer.h"
 
-#define MEDIUM_DIFFICULTY std::vector{0, 10, 7, 5, 0, 2}
+#define MEDIUM_DIFFICULTY std::vector{0, 28, 19, 12, 0, 5}
 
 Deck::Deck(Application app)
     : texture("assets/deck.png", SDL_FRect{10.8,6.6,1.5,2.25}, app)
@@ -18,10 +18,6 @@ void Deck::Draw()
 
 void Deck::Update(SDL_Event& event)
 {
-    if (cards.size() == 0)
-    {
-        texture.SetVisible(false);
-    }
 }
 
 void Deck::Refill()
@@ -54,18 +50,28 @@ void Deck::Randomize()
     std::swap(cards[id], cards.back());
 }
 
-void Deck::PutCard(Card&& card)
+void Deck::PutCard(CardPtr card)
 {
+    texture.SetVisible(true);
     cards.emplace_back(std::move(card));
 }
 
-Card Deck::TakeCard()
+CardPtr Deck::TakeCard()
 {
     Randomize();
     auto card = std::move(cards.back());
     cards.pop_back();
+    if (cards.empty())
+    {
+        texture.SetVisible(false);
+    }
 
     return card;
+}
+
+int Deck::Size()
+{
+    return cards.size();
 }
 
 bool Deck::Empty()

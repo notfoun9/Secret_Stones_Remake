@@ -1,11 +1,10 @@
 #pragma once
-
 #include <application/application.h>
 #include "game_objects/game_object.h"
 #include "game_objects/static_texture.h"
-#include <stack>
 
 class Card;
+typedef std::unique_ptr<Card> CardPtr;
 
 class Deck : public GameObject
 {
@@ -21,13 +20,14 @@ public:
 
     void Randomize();
 
-    void PutCard(Card&& card);
+    void PutCard(CardPtr card);
 
-    Card TakeCard();
+    CardPtr TakeCard();
 
+    int Size();
     bool Empty();
 private:
-    std::vector<Card> cards;
+    std::vector<CardPtr> cards;
     StaticTexture     texture;
 };
 

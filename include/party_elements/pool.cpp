@@ -19,28 +19,28 @@ Pool::Pool(Application app)
 
     for (int i = 0; i < COST_1_CARDS; ++i)
     {
-        cards[1].emplace_back(1, i, app);
+        cards[1].emplace_back(std::make_unique<Card>(1, i, app));
     }
 
     for (int i = 0; i < COST_2_CARDS; ++i)
     {
-        cards[2].emplace_back(2, i, app);
+        cards[2].emplace_back(std::make_unique<Card>(2, i, app));
     }
 
     for (int i = 0; i < COST_3_CARDS; ++i)
     {
-        cards[3].emplace_back(3, i, app);
+        cards[3].emplace_back(std::make_unique<Card>(3, i, app));
     }
 
     for (int i = 0; i < COST_5_CARDS; ++i)
     {
-        cards[5].emplace_back(5, i, app);
+        cards[5].emplace_back(std::make_unique<Card>(5, i, app));
     }
 
     Manager::InitPool(this);
 }
 
-Card Pool::TakeCard(int cost)
+CardPtr Pool::TakeCard(int cost)
 {
     Randomize(cost);
     auto card = std::move(cards[cost].back());
@@ -49,9 +49,9 @@ Card Pool::TakeCard(int cost)
     return card;
 }
 
-void Pool::PutCard(Card&& card)
+void Pool::PutCard(CardPtr card)
 {
-    cards[card.Cost()].emplace_back(std::move(card));
+    cards[card->Cost()].emplace_back(std::move(card));
 }
 
 void Pool::Randomize(int cost)

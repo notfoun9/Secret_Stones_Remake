@@ -10,18 +10,21 @@ public:
         : tex(TextureManager::LoadTexture(app.Renderer(), texPath))
         , relativeRect(rect)
         , app(app)
-        , visible(true)
     {
         UpdateDestRect();
     }
 
-    StaticTexture(SDL_Texture*&& texture, SDL_FRect rect, Application app)
+    StaticTexture(SDL_Texture* texture, SDL_FRect rect, Application app)
         : tex(texture)
         , relativeRect(rect)
         , app(app)
-        , visible(true)
     {
         UpdateDestRect();
+    }
+
+    StaticTexture(SDL_FRect rect, Application app)
+        : StaticTexture((SDL_Texture*){}, rect, app)
+    {
     }
 
     ~StaticTexture()
@@ -63,10 +66,17 @@ public:
     {
         visible = isVisible;
     }
+
+    SDL_Texture* ResetTexture(SDL_Texture* newTex)
+    {
+        auto tmp = tex;
+        tex = newTex;
+        return tmp;
+    }
 private:
     Application   app;
     SDL_Texture*  tex;
     SDL_FRect     destRect;
     SDL_FRect     relativeRect;
-    bool          visible;
+    bool          visible{true};
 };

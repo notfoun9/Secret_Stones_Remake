@@ -12,19 +12,9 @@ public:
         , condition(GetCondition(cost, id))
     {}
 
-    Card(Card&& card) : face(card.face), condition(card.condition), cost(card.cost)
-    {
-        card.face = nullptr;
-    }
-
-    void operator=(Card&& card)
-    {
-        std::swap(face, card.face);
-        cost = card.cost;
-        condition = card.condition;
-    }
-
+    Card(Card&&) = delete;
     Card(const Card&) = delete;
+    void operator=(Card&&) = delete;
     void operator=(const Card&) = delete;
 
     ~Card()

@@ -21,7 +21,7 @@ public:
     {
         for (int i = 0; i < HAND_SIZE; ++i)
         {
-            if (cards[i].has_value())
+            if (cards[i])
             {
                 TextureManager::DrawFull(app.Renderer(), cards[i]->Face(), &dests[i]);
             }
@@ -35,7 +35,7 @@ public:
 
         for (int i = 0; i < HAND_SIZE; ++i)
         {
-            if (SDL_HasRectIntersectionFloat(&dests[i], &mouseTip) && cards[i].has_value())
+            if (SDL_HasRectIntersectionFloat(&dests[i], &mouseTip) && cards[i])
             {
                 relatives[i].y = SELECTED_CARD_Y;
                 if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
@@ -51,11 +51,11 @@ public:
         UpdateDestRect();
     }
 
-    void AddCard(Card&& card)
+    void AddCard(CardPtr card)
     {
         for (int i = 0; i < HAND_SIZE; ++i)
         {
-            if (cards[i].has_value() == false)
+            if (!cards[i])
             {
                 cards[i] = std::move(card);
                 return;
@@ -68,7 +68,7 @@ public:
         int slots{};
         for (const auto& card : cards)
         {
-            if (!card.has_value())
+            if (!card)
             {
                 ++slots;
             }
@@ -76,7 +76,7 @@ public:
         return slots;
     }
 
-    std::vector<std::optional<Card>>& Cards()
+    std::vector<CardPtr>& Cards()
     {
         return cards;
     }
@@ -100,10 +100,10 @@ private:
 
     void TryUseCard(int i)
     {
-        if (Manager::CardIsUsable(cards[i].value()))
+        if (Manager::CardIsUsable(*cards[i]))
         {
-            auto card = std::move(cards[i].value());
-            cards[i].reset();
+            auto card = std::move(cards[i]);
+            cards[i] = {};
             Manager::UseCard(std::move(card));
         }
     }
@@ -112,7 +112,7 @@ private:
     Application app;
     std::vector<SDL_FRect> dests;
     std::vector<SDL_FRect> relatives;
-    std::vector<std::optional<Card>> cards;
+    std::vector<CardPtr> cards;
 };
 
 inline Hand::Hand(Application app) : app(app)
