@@ -13,7 +13,10 @@ Deck::Deck(Application app)
 
 void Deck::Draw()
 {
-    texture.Draw();
+    if (!cards.empty())
+    {
+        texture.Draw();
+    }
 }
 
 void Deck::Update(SDL_Event& event)
@@ -52,7 +55,6 @@ void Deck::Randomize()
 
 void Deck::PutCard(CardPtr card)
 {
-    texture.SetVisible(true);
     cards.emplace_back(std::move(card));
 }
 
@@ -61,10 +63,6 @@ CardPtr Deck::TakeCard()
     Randomize();
     auto card = std::move(cards.back());
     cards.pop_back();
-    if (cards.empty())
-    {
-        texture.SetVisible(false);
-    }
 
     return card;
 }

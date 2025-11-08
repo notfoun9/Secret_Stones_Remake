@@ -9,19 +9,21 @@
 #include "../game_objects/static_texture.h"
 #include "party_elements/discard_pile.h"
 #include "party_elements/manager.h"
+#include "states/game_states.h"
 
 struct ExitAction : public Button::Action
 {
-    ExitAction(bool& exited)
-        : exited(exited)
+    ExitAction(GameState& state)
+        : state(state)
     {}
 
     void operator()() override
     {
-        exited = true;
+        Manager::EndParty();
+        state = GameState::Menu;
     }
 
-    bool& exited;
+    GameState& state;
 };
 
 struct SkipAction : public Button::Action
@@ -42,14 +44,14 @@ struct DropSwitch : public Switch::Action
 
 Party::Party(Application app)
     : app(app)
-    , exited(false)
 {
     InitGameObjects();
 }
 
 
-void Party::HandleEvents(GameState& state)
+void Party::HandleEvents()
 {
+    auto& state = app.GameState();
     SDL_Event event;
     while (SDL_PollEvent(&event))
     {
@@ -57,6 +59,7 @@ void Party::HandleEvents(GameState& state)
         {
             case SDL_EVENT_QUIT:
             {
+                Manager::EndParty();
                 state = GameState::Exit;
                 return;
             };
@@ -64,7 +67,8 @@ void Party::HandleEvents(GameState& state)
             {
                 if (event.key.key == SDLK_ESCAPE)
                 {
-                    exited = true;
+                    Manager::EndParty();
+                    state = GameState::Menu;
                     return;
                 }
             };
@@ -82,14 +86,15 @@ void Party::HandleEvents(GameState& state)
     }
 }
 
-void Party::Run(GameState& state)
+void Party::Run()
 {
+    auto& state = app.GameState();
     Manager::StartParty();
     while (state == GameState::Party)
     {
         SDL_RenderClear(app.Renderer());
 
-        HandleEvents(state);
+        HandleEvents();
 
         for (auto& obj : gameObjects)
         {
@@ -97,13 +102,6 @@ void Party::Run(GameState& state)
         }
 
         SDL_RenderPresent(app.Renderer());
-
-        if (exited)
-        {
-            Manager::EndParty();
-            state = GameState::Menu;
-            exited = false;
-        }
 
         app.ControlFPS();
     }
@@ -117,7 +115,7 @@ void Party::InitGameObjects()
         SDL_FRect{0.4, 0.15, 3, 1.125},
         app
     );
-    menuButton->SetAction(std::make_unique<ExitAction>(exited));
+    menuButton->SetAction(std::make_unique<ExitAction>(app.GameState()));
     gameObjects.emplace_back(std::move(menuButton));
 
     auto skipButton = std::make_unique<Button>(

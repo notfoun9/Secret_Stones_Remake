@@ -12,31 +12,29 @@ public:
 
     ~Rules() = default;
 
-    void Run(GameState& state);
+    void Run();
 
     struct ExitAction : public Button::Action
     {
-        ExitAction(bool& exited)
-            : exited(exited)
+        ExitAction(GameState& state)
+            : state(state)
         {}
 
         void operator()() override
         {
-            exited = true;
+            state = GameState::Menu;
         }
 
-        bool& exited;
+        GameState& state;
     };
 
 private:
     Application                               app;
-    bool                                      exited;
     std::vector<std::unique_ptr<GameObject>>  gameObjects;
 };
 
 inline Rules::Rules(Application app)
     : app(app)
-    , exited(false)
 {
     auto exitButton = std::make_unique<Button>(
         "assets/menu_default.png",
@@ -44,7 +42,7 @@ inline Rules::Rules(Application app)
         SDL_FRect{6, 6.9, 4, 1.5},
         app
     );
-    exitButton->SetAction(std::make_unique<ExitAction>(exited));
+    exitButton->SetAction(std::make_unique<ExitAction>(app.GameState()));
     gameObjects.push_back(std::move(exitButton));
 
     extern const std::string rulesText;
@@ -55,8 +53,9 @@ inline Rules::Rules(Application app)
     ));
 }
 
-inline void Rules::Run(GameState& state)
+inline void Rules::Run()
 {
+    auto& state = app.GameState();
     while (state == GameState::Rules)
     {
         SDL_RenderClear(app.Renderer());
@@ -98,13 +97,6 @@ inline void Rules::Run(GameState& state)
         }
 
         SDL_RenderPresent(app.Renderer());
-
-        if (exited)
-        {
-            state = GameState::Menu;
-            exited = false;
-        }
-
         app.ControlFPS();
     }
 }

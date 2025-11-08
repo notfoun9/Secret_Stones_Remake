@@ -1,6 +1,7 @@
 #include <spdlog/spdlog.h>
 #include "application.h"
 #include "../tools/fps_controller.h"
+#include "states/game_states.h"
 
 struct ApplicationBackend
 {
@@ -56,6 +57,7 @@ struct ApplicationBackend
     static constexpr int   windowHeight = 900;
 
     FPS_Controller         fps{60};
+    GameState              state{GameState::Menu};
 };
 
 class ApplicationImpl
@@ -81,6 +83,11 @@ public:
     SDL_Renderer* Renderer()
     {
         return impl.renderer;
+    }
+
+    GameState& GameState()
+    {
+        return impl.state;
     }
 
     Fonts* Fonts()
@@ -142,6 +149,11 @@ SDL_Renderer* Application::Renderer()
 Fonts* Application::Fonts()
 {
     return impl->Fonts();
+}
+
+GameState& Application::GameState()
+{
+    return impl->GameState();
 }
 
 void Application::AdjustWindowSize()

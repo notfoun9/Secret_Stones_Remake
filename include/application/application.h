@@ -1,5 +1,6 @@
 #pragma once
 #include "fonts.h"
+#include "../states/game_states.h"
 
 class ApplicationImpl;
 
@@ -11,8 +12,8 @@ public:
     Application(Application&& app);
 
     SDL_Window* Window();
-
     SDL_Renderer* Renderer();
+    GameState& GameState();
 
     Fonts* Fonts();
 

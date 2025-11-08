@@ -13,16 +13,16 @@ int main(int argc, char* argv[])
     // TODO:
     // GameOver gameOver{app};
     
-    GameState state{GameState::Menu};
+    auto& state = app.GameState();
     while (state != GameState::Exit)
     {
         switch (state)
         {
-            case GameState::Menu:      menu.Run(state);      break;
-            case GameState::Rules:     rules.Run(state);     break;
-            case GameState::Party:     party.Run(state);     break;
+            case GameState::Menu:     menu.Run();     break;
+            case GameState::Rules:    rules.Run();    break;
+            case GameState::Party:    party.Run();    break;
             // TODO:
-            // case GameState::GameOver:  gameOver.Run(state);  break;
+            // case GameState::GameOver: gameOver.Run(state); break;
 
             default: state = GameState::Exit;  break;
         }

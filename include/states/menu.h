@@ -10,7 +10,7 @@ public:
 
     ~Menu() = default;
 
-    void Run(GameState& state);
+    void Run();
 
     struct ExitAction : public Button::Action
     {
@@ -92,8 +92,9 @@ inline Menu::Menu(Application app)
     gameObjects.push_back(std::move(exitButton));
 }
 
-inline void Menu::Run(GameState& state)
+inline void Menu::Run()
 {
+    auto& state = app.GameState();
     while (state == GameState::Menu)
     {
         SDL_RenderClear(app.Renderer());

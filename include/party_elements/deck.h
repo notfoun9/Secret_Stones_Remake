@@ -27,7 +27,7 @@ public:
     int Size();
     bool Empty();
 private:
+    StaticTexture        texture;
     std::vector<CardPtr> cards;
-    StaticTexture     texture;
 };
 
