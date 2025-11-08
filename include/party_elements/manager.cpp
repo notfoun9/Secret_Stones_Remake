@@ -15,7 +15,9 @@ static Field* m_field = nullptr;
 static Hand*  m_hand = nullptr;
 static Pool*  m_pool = nullptr;
 
-static int    m_moves = 999;
+static int    m_moves = 0;
+static int    m_strikes = 0;
+static bool   m_cardUsed = 0;
 static Tile*  m_selectedTile = nullptr;
 
 enum Mode : bool
@@ -74,10 +76,12 @@ void UseCard(CardPtr card)
 {
     if (mode == Drop)
     {
+        ++m_moves;
         m_discardPile->PutCard(std::move(card));
     }
     else
     {
+        m_cardUsed = true;
         m_pool->PutCard(std::move(card));
     }
 }
@@ -107,6 +111,12 @@ void RefillDeck()
 
 void SkipAction()
 {
+    if (m_cardUsed)
+    {
+        ++m_strikes;
+    }
+    m_cardUsed = false;
+
     if (m_deck->Size() < m_hand->EmptySlots())
     {
         RefillDeck();
@@ -116,7 +126,11 @@ void SkipAction()
 
 void StartParty()
 {
-    m_field->GetState();
+    m_moves = 0;
+    m_strikes = 0;
+    m_cardUsed = false;
+    m_selectedTile = nullptr;
+
     m_field->ConstructRandomField();
     m_deck->Refill();
     FillHand();
