@@ -1,4 +1,5 @@
-#include <optional>
+#include <iostream>
+#include <party_elements/action_counter.h>
 #include <party_elements/card.h>
 #include <party_elements/deck.h>
 #include <party_elements/discard_pile.h>
@@ -6,18 +7,19 @@
 #include <party_elements/hand.h>
 #include <party_elements/manager.h>
 #include <party_elements/pool.h>
+#include <party_elements/strike_counter.h>
 
 namespace Manager {
 
-static DiscardPile*  m_discardPile = nullptr;
+static ActionCounter* m_actions = nullptr;
 static Deck*  m_deck = nullptr;
+static DiscardPile*  m_discardPile = nullptr;
 static Field* m_field = nullptr;
 static Hand*  m_hand = nullptr;
 static Pool*  m_pool = nullptr;
+static StrikeCounter* m_strikes = nullptr;
 
-static int    m_moves = 0;
-static int    m_strikes = 0;
-static bool   m_cardUsed = 0;
+static bool   m_cardUsed = false;
 static Tile*  m_selectedTile = nullptr;
 
 enum Mode : bool
@@ -26,6 +28,14 @@ enum Mode : bool
     Select
 } mode = Select;
 
+
+void InitActionCounter(ActionCounter* actions)
+{
+    static int singleUseGuard{0};
+    assert(0 == singleUseGuard++);
+
+    m_actions = actions;
+}
 
 void InitDeck(Deck* deck)
 {
@@ -67,6 +77,14 @@ void InitDiscardPile(DiscardPile *discardPile)
     m_discardPile = discardPile;
 }
 
+void InitStrikeCounter(StrikeCounter* strikes)
+{
+    static int singleUseGuard{0};
+    assert(0 == singleUseGuard++);
+
+    m_strikes = strikes;
+}
+
 bool CardIsUsable(const Card &card)
 {
     return (mode == Drop) || card.CheckCondition(m_field->GetState());
@@ -76,7 +94,7 @@ void UseCard(CardPtr card)
 {
     if (mode == Drop)
     {
-        ++m_moves;
+        m_actions->Increase();
         m_discardPile->PutCard(std::move(card));
     }
     else
@@ -111,9 +129,9 @@ void RefillDeck()
 
 void SkipAction()
 {
-    if (m_cardUsed)
+    if (!m_cardUsed)
     {
-        ++m_strikes;
+        m_strikes->Increase();
     }
     m_cardUsed = false;
 
@@ -126,19 +144,19 @@ void SkipAction()
 
 void StartParty()
 {
-    m_moves = 0;
-    m_strikes = 0;
-    m_cardUsed = false;
-    m_selectedTile = nullptr;
-
     m_field->ConstructRandomField();
     m_deck->Refill();
     FillHand();
+
+    m_actions->Reset();
+    m_strikes->Reset();
+    m_cardUsed = false;
+    m_selectedTile = nullptr;
 }
 
 void TileAction(Tile* tile)
 {
-    if (!m_moves)
+    if (m_actions->Value() == 0)
     {
         return;
     }
@@ -155,7 +173,7 @@ void TileAction(Tile* tile)
         m_selectedTile = nullptr;
         tile->Click();
         tile->Flip();
-        --m_moves;
+        m_actions->Decrease();
         return;
     }
 
@@ -167,7 +185,7 @@ void TileAction(Tile* tile)
     if (diff == 1  && pos1 / 3 == pos2 / 3 || diff == 3)
     {
         m_field->SwapTiles(tile->GetPosition(), m_selectedTile->GetPosition());
-        --m_moves;
+        m_actions->Decrease();
     }
     m_selectedTile = nullptr;
 }

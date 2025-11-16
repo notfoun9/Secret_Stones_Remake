@@ -1,4 +1,5 @@
 add_library(party_elements
+    action_counter.h
     card.h
     conditions.h
     conditions.cpp
@@ -11,6 +12,7 @@ add_library(party_elements
     manager.cpp
     pool.h
     pool.cpp
+    strike_counter.h
     tile.h
     tile.cpp
 )

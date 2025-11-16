@@ -1,15 +1,14 @@
-#include <memory>
 #include <states/party.h>
+#include <party_elements/action_counter.h>
+#include <party_elements/deck.h>
+#include <party_elements/discard_pile.h>
 #include <party_elements/field.h>
 #include <party_elements/hand.h>
-#include <party_elements/deck.h>
+#include <party_elements/manager.h>
 #include <party_elements/pool.h>
+#include <party_elements/strike_counter.h>
 #include "../game_objects/button.h"
 #include "../game_objects/switch.h"
-#include "../game_objects/static_texture.h"
-#include "party_elements/discard_pile.h"
-#include "party_elements/manager.h"
-#include "states/game_states.h"
 
 struct ExitAction : public Button::Action
 {
@@ -147,4 +146,6 @@ void Party::InitGameObjects()
     gameObjects.emplace_back(std::make_unique<Deck>(app));
     gameObjects.emplace_back(std::make_unique<Hand>(app));
     gameObjects.emplace_back(std::make_unique<DiscardPile>(app));
+    gameObjects.emplace_back(std::make_unique<StrikeCounter>(app));
+    gameObjects.emplace_back(std::make_unique<ActionCounter>(app));
 }
