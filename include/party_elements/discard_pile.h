@@ -37,6 +37,11 @@ public:
         return cards;
     }
 
+    bool Empty()
+    {
+        return cards.empty();
+    }
+
 private:
     Application app;
     StaticTexture texture;

@@ -80,6 +80,11 @@ public:
     {
         return cards;
     }
+
+    bool Empty()
+    {
+        return EmptySlots() == 4;
+    }
 private:
     void UpdateDestRect()
     {

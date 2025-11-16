@@ -9,6 +9,7 @@
 #include <party_elements/strike_counter.h>
 #include "../game_objects/button.h"
 #include "../game_objects/switch.h"
+#include "states/game_states.h"
 
 struct ExitAction : public Button::Action
 {
@@ -18,7 +19,6 @@ struct ExitAction : public Button::Action
 
     void operator()() override
     {
-        Manager::EndParty();
         state = GameState::Menu;
     }
 
@@ -66,7 +66,6 @@ void Party::HandleEvents()
             {
                 if (event.key.key == SDLK_ESCAPE)
                 {
-                    Manager::EndParty();
                     state = GameState::Menu;
                     return;
                 }
@@ -87,9 +86,9 @@ void Party::HandleEvents()
 
 void Party::Run()
 {
-    auto& state = app.GameState();
+    auto& gameState = app.GameState();
     Manager::StartParty();
-    while (state == GameState::Party)
+    while (gameState == GameState::Party)
     {
         SDL_RenderClear(app.Renderer());
 
@@ -103,7 +102,13 @@ void Party::Run()
         SDL_RenderPresent(app.Renderer());
 
         app.ControlFPS();
+
+        if (Manager::IsGameWon() || Manager::IsGameLost())
+        {
+            gameState = GameState::GameOver;
+        }
     }
+    Manager::EndParty();
 }
 
 void Party::InitGameObjects()

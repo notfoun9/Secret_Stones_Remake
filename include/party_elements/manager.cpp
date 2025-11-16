@@ -22,11 +22,18 @@ static StrikeCounter* m_strikes = nullptr;
 static bool   m_cardUsed = false;
 static Tile*  m_selectedTile = nullptr;
 
+enum PartyState
+{
+    Running = 0,
+    Won = 1,
+    Lost = 2
+} m_partyState = Running;
+
 enum Mode : bool
 {
     Drop,
     Select
-} mode = Select;
+} m_mode = Select;
 
 
 void InitActionCounter(ActionCounter* actions)
@@ -87,12 +94,12 @@ void InitStrikeCounter(StrikeCounter* strikes)
 
 bool CardIsUsable(const Card &card)
 {
-    return (mode == Drop) || card.CheckCondition(m_field->GetState());
+    return (m_mode == Drop) || card.CheckCondition(m_field->GetState());
 }
 
 void UseCard(CardPtr card)
 {
-    if (mode == Drop)
+    if (m_mode == Drop)
     {
         m_actions->Increase();
         m_discardPile->PutCard(std::move(card));
@@ -101,6 +108,10 @@ void UseCard(CardPtr card)
     {
         m_cardUsed = true;
         m_pool->PutCard(std::move(card));
+        if (m_deck->Empty() && m_discardPile->Empty() && m_hand->Empty())
+        {
+            m_partyState = Won;
+        }
     }
 }
 
@@ -132,6 +143,10 @@ void SkipAction()
     if (!m_cardUsed)
     {
         m_strikes->Increase();
+        if (m_strikes->Value() > 3)
+        {
+            m_partyState = Lost;
+        }
     }
     m_cardUsed = false;
 
@@ -144,6 +159,7 @@ void SkipAction()
 
 void StartParty()
 {
+    m_partyState = Running;
     m_field->ConstructRandomField();
     m_deck->Refill();
     FillHand();
@@ -215,15 +231,25 @@ void EndParty()
     discardedCards.resize(0);
 }
 
+bool IsGameWon()
+{
+    return m_partyState == Won;
+}
+
+bool IsGameLost()
+{
+    return m_partyState == Lost;
+}
+
 void SwitchMode()
 {
-    if (mode == Drop)
+    if (m_mode == Drop)
     {
-        mode = Select;
+        m_mode = Select;
     }
     else
     {
-        mode = Drop;
+        m_mode = Drop;
     }
 }
 

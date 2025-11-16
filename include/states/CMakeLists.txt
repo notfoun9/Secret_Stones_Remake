@@ -1,5 +1,6 @@
 add_library(states
     game_states.h
+    game_over.h
     menu.h
     party.h
     party.cpp

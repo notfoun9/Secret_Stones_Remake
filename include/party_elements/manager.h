@@ -13,6 +13,7 @@ class StrikeCounter;
 
 typedef std::unique_ptr<Card> CardPtr;
 enum struct TileAction;
+enum struct PartyState;
 
 namespace Manager
 {
@@ -27,6 +28,8 @@ namespace Manager
 
     void StartParty();
     void EndParty();
+    bool IsGameWon();
+    bool IsGameLost();
 
     void InitActionCounter(ActionCounter* counter);
     void InitDeck(Deck* deck);

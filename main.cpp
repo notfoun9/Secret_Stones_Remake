@@ -3,15 +3,15 @@
 #include <states/menu.h>
 #include <states/rules.h>
 #include <states/party.h>
+#include <states/game_over.h>
 
 int main(int argc, char* argv[])
 {
-    auto app = Application();
+    auto app = Application{};
     Menu menu{app};
     Rules rules{app};
     Party party{app};
-    // TODO:
-    // GameOver gameOver{app};
+    GameOver gameOver{app};
     
     auto& state = app.GameState();
     while (state != GameState::Exit)
@@ -21,8 +21,7 @@ int main(int argc, char* argv[])
             case GameState::Menu:     menu.Run();     break;
             case GameState::Rules:    rules.Run();    break;
             case GameState::Party:    party.Run();    break;
-            // TODO:
-            // case GameState::GameOver: gameOver.Run(state); break;
+            case GameState::GameOver: gameOver.Run(); break;
 
             default: state = GameState::Exit;  break;
         }

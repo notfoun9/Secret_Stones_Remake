@@ -6,4 +6,5 @@ enum struct GameState
     Party = 1,
     Rules = 2,
     Exit = 3,
+    GameOver = 4,
 };
