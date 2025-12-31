@@ -2,6 +2,7 @@ add_library(application
     application.h
     application.cpp
     fonts.h
+    fonts.cpp
 )
 
 set_property(TARGET application PROPERTY CXX_STANDARD 20)

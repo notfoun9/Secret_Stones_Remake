@@ -94,7 +94,7 @@ inline Menu::Menu(Application app)
 
 inline void Menu::Run()
 {
-    auto& state = app.GameState();
+    auto& state = app.GetGameState();
     while (state == GameState::Menu)
     {
         SDL_RenderClear(app.Renderer());

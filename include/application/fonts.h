@@ -2,34 +2,7 @@
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <spdlog/spdlog.h>
-#include "../tools/log.h"
 
-namespace {
-    class Font_details
-    {
-    public:
-        Font_details(const char* name, float size)
-            : font(TTF_OpenFont(name, size))
-        {
-            if (!font)
-            {
-                Log::CriticalSDLError("TTF_OpenFont failed: {}");
-            }
-        }
-        ~Font_details()
-        {
-            TTF_CloseFont(font);
-        }
-
-        TTF_Font* Get()
-        {
-            return font;
-        }
-
-    private:
-        TTF_Font* font{nullptr};
-    };
-};
 
 enum FontName : char
 {
@@ -39,16 +12,24 @@ enum FontName : char
 class Fonts
 {
 public:
-    Fonts()
-    {
-        fonts[JB_Mono] = std::make_unique<Font_details>("assets/jb_mono.ttf", 50);
-    }
+    Fonts();
 
-    inline TTF_Font* Get(FontName name)
-    {
-        return fonts[name]->Get();
-    }
+    TTF_Font* Get(FontName name);
 private:
-    std::unordered_map<FontName, std::unique_ptr<Font_details>> fonts;
+    class FontDetails;
+    std::unordered_map<FontName, std::unique_ptr<FontDetails>> fonts;
+
+    class FontDetails
+    {
+    public:
+        FontDetails(const char* name, float size);
+
+        ~FontDetails();
+
+        TTF_Font* Get();
+
+    private:
+        TTF_Font* font{nullptr};
+    };
 };
 

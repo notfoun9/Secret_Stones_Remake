@@ -13,9 +13,9 @@ public:
 
     SDL_Window* Window();
     SDL_Renderer* Renderer();
-    GameState& GameState();
+    GameState& GetGameState();
 
-    Fonts* Fonts();
+    Fonts* GetFonts();
 
     void AdjustWindowSize();
 

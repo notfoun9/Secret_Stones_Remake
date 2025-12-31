@@ -1,6 +1,7 @@
 #include <spdlog/spdlog.h>
 #include "application.h"
 #include "../tools/fps_controller.h"
+#include "../tools/log.h"
 #include "states/game_states.h"
 
 struct ApplicationBackend
@@ -85,12 +86,12 @@ public:
         return impl.renderer;
     }
 
-    GameState& GameState()
+    GameState& GetGameState()
     {
         return impl.state;
     }
 
-    Fonts* Fonts()
+    Fonts* GetFonts()
     {
         return &fonts;
     }
@@ -146,14 +147,14 @@ SDL_Renderer* Application::Renderer()
     return impl->Renderer();
 }
 
-Fonts* Application::Fonts()
+Fonts* Application::GetFonts()
 {
-    return impl->Fonts();
+    return impl->GetFonts();
 }
 
-GameState& Application::GameState()
+GameState& Application::GetGameState()
 {
-    return impl->GameState();
+    return impl->GetGameState();
 }
 
 void Application::AdjustWindowSize()

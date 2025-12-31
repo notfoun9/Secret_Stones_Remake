@@ -52,14 +52,14 @@ inline GameOver::GameOver(Application app)
         SDL_FRect{6, 6.9, 4, 1.5},
         app
     );
-    exitButton->SetAction(std::make_unique<ExitAction>(app.GameState()));
+    exitButton->SetAction(std::make_unique<ExitAction>(app.GetGameState()));
     gameObjects.push_back(std::move(exitButton));
 }
 
 inline void GameOver::Run()
 {
     resultTexture.ResetTexture(Text{PrintedText(), FontName::JB_Mono, {}, app}.Texture());
-    auto& state = app.GameState();
+    auto& state = app.GetGameState();
     while (state == GameState::GameOver)
     {
         SDL_RenderClear(app.Renderer());

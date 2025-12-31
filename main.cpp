@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
     Party party{app};
     GameOver gameOver{app};
     
-    auto& state = app.GameState();
+    auto& state = app.GetGameState();
     while (state != GameState::Exit)
     {
         switch (state)

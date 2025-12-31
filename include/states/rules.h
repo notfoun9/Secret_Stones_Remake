@@ -42,7 +42,7 @@ inline Rules::Rules(Application app)
         SDL_FRect{6, 6.9, 4, 1.5},
         app
     );
-    exitButton->SetAction(std::make_unique<ExitAction>(app.GameState()));
+    exitButton->SetAction(std::make_unique<ExitAction>(app.GetGameState()));
     gameObjects.push_back(std::move(exitButton));
 
     extern const std::string rulesText;
@@ -55,7 +55,7 @@ inline Rules::Rules(Application app)
 
 inline void Rules::Run()
 {
-    auto& state = app.GameState();
+    auto& state = app.GetGameState();
     while (state == GameState::Rules)
     {
         SDL_RenderClear(app.Renderer());

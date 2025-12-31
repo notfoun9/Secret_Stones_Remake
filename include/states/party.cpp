@@ -50,7 +50,7 @@ Party::Party(Application app)
 
 void Party::HandleEvents()
 {
-    auto& state = app.GameState();
+    auto& state = app.GetGameState();
     SDL_Event event;
     while (SDL_PollEvent(&event))
     {
@@ -86,7 +86,7 @@ void Party::HandleEvents()
 
 void Party::Run()
 {
-    auto& gameState = app.GameState();
+    auto& gameState = app.GetGameState();
     Manager::StartParty();
     while (gameState == GameState::Party)
     {
@@ -119,7 +119,7 @@ void Party::InitGameObjects()
         SDL_FRect{0.4, 0.15, 3, 1.125},
         app
     );
-    menuButton->SetAction(std::make_unique<ExitAction>(app.GameState()));
+    menuButton->SetAction(std::make_unique<ExitAction>(app.GetGameState()));
     gameObjects.emplace_back(std::move(menuButton));
 
     auto skipButton = std::make_unique<Button>(

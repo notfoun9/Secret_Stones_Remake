@@ -17,7 +17,7 @@ file(COPY back.png DESTINATION ${CMAKE_BINARY_DIR}/assets)
 file(COPY deck.png DESTINATION ${CMAKE_BINARY_DIR}/assets)
 file(COPY dropButton.png DESTINATION ${CMAKE_BINARY_DIR}/assets)
 file(COPY tip.png DESTINATION ${CMAKE_BINARY_DIR}/assets)
-file(COPY unselectedblankCard.png DESTINATION ${CMAKE_BINARY_DIR}/assets)
+file(COPY unselectedBlankCard.png DESTINATION ${CMAKE_BINARY_DIR}/assets)
 
 add_subdirectory(tiles)
 add_subdirectory(cards)

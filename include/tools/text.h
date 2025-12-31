@@ -1,6 +1,7 @@
 #pragma once
 #include <application/application.h>
 #include <string_view>
+#include "log.h"
 
 class Text {
 public:
@@ -38,7 +39,7 @@ private:
     SDL_Texture* TextureFromText(std::string_view text, const FontName& font, const SDL_Color& color)
     {
         auto surface = TTF_RenderText_Solid_Wrapped(
-            app.Fonts()->Get(font),
+            app.GetFonts()->Get(font),
             text.data(),
             0,
             color,
